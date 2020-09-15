@@ -1,0 +1,46 @@
+service: upr-enrollment-api
+
+plugins:
+  - serverless-plugin-typescript
+  #- serverless-plugin-optimize
+  - serverless-offline
+  # - serverless-plugin-warmup
+  - serverless-apigw-binary
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: production
+  region: us-east-1
+  memorySize: 2560
+
+
+# for optimze plugin
+package:
+  individually: true
+
+  custom:
+  # Enable warmup on all functions (only for production and staging)
+  # warmup:
+  #   enabled: true
+  
+  apigwBinary:
+    types:
+      - '*/*'
+
+
+functions:
+  main: # The name of the lambda function
+    # The module 'handler' is exported in the file 'src/lambda'
+    handler: src/lambda.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+
+      - http:
+          path: /{any+}
+          method: ANY
+
+    environment:
+      NODE_ENV: 'dev'
