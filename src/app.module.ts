@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { StudentsModule } from './students/students.module';
 import { StudentsController } from './students/students.controller';
 import { Module } from '@nestjs/common';
@@ -9,6 +10,7 @@ import { StudentsService } from './students/students.service';
 
 @Module({
   imports: [
+    AuthModule, 
     StudentsModule, 
     TypeOrmModule.forRootAsync({
       useClass: Database,

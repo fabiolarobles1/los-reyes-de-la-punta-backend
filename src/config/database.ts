@@ -27,12 +27,12 @@ export class Database implements TypeOrmOptionsFactory {
         extra: {
            charset: "utf8mb4_unicode_ci" 
         },
-        entities: [__dirname + './../**/*.entity!(*.d).{ts,js}'],
-        // entities: [
-        //   DegreesEntity,
-        //   StudentsEntity,
-        //   DepartmentsEntity
-        // ],
+        // entities: [__dirname + './../**/*.entity!(*.d).{ts,js}'],
+        entities: [
+          DegreesEntity,
+          StudentsEntity,
+          DepartmentsEntity
+        ],
         synchronize: false
       } as unknown as TypeOrmModuleOptions;
 
