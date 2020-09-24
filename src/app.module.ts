@@ -7,20 +7,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Database } from './config/database';
 import { StudentsService } from './students/students.service';
+import { AuthService } from './auth/auth.service';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    AuthModule, 
-    StudentsModule, 
     TypeOrmModule.forRootAsync({
       useClass: Database,
-    })
+    }),
+    AuthModule, 
+    StudentsModule
   ],
-  controllers: [
-        StudentsController, AppController],
-  providers: [
-    AppService,
-    StudentsService
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
