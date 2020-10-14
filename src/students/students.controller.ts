@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseGuards, Request } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local.auth.guard';
 import { StudentsService } from './students.service';
@@ -26,5 +27,10 @@ export class StudentsController {
     public async login(@Request() req) {
         console.log(req.user);
         return this.authService.login(req.user);
+    }
+
+    @Get('courses')
+    public async getCourses () {
+        return this.studentService.getCourses().then(res => res).catch(err => err);
     }
 }
