@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Request } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Body, Controller, Get, Param, Post, UseGuards, Request, Req } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard';
+
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local.auth.guard';
 import { StudentsService } from './students.service';
@@ -29,8 +30,10 @@ export class StudentsController {
         return this.authService.login(req.user);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('courses')
-    public async getCourses () {
+    public async getCourses(@Req() req) {
+        const student = req.user;
         return this.studentService.getCourses().then(res => res).catch(err => err);
     }
 }
