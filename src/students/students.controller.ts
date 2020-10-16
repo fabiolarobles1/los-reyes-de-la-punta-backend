@@ -31,9 +31,10 @@ export class StudentsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('courses')
+    @Get('courses_firstSemester')
     public async getCourses(@Req() req) {
         const student = req.user;
-        return this.studentService.getCourses().then(res => res).catch(err => err);
+        const stuYear = student.stu_year
+        return this.studentService.getCourses(stuYear).then(res => res).catch(err => err);
     }
 }
