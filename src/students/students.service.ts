@@ -20,8 +20,11 @@ export class StudentsService {
         return await this.departmentsRepo.find({ select: ['name'] }).then(res => res).catch(err => err);
     }
 
-    public async getCourses(stu_year) {
+    public async getCurrentCourses(stu_year) {
         return await this.coursesRepo.find({ select: [ 'name',"description"] ,where: { year: stu_year , semestre:1}}).then(res => res).catch(err => err);
     }
-    
+
+    public async getNextSemesterCourses(stu_year) {
+        return await this.coursesRepo.find({ select: [ 'name',"description"] ,where: { year: stu_year , semestre:2}}).then(res => res).catch(err => err);
+    }
 }
