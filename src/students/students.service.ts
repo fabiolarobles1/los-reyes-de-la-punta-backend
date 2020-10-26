@@ -27,4 +27,13 @@ export class StudentsService {
     public async getNextSemesterCourses(stu_year) {
         return await this.coursesRepo.find({ select: [ 'name',"description"] ,where: { year: stu_year , semestre:2}}).then(res => res).catch(err => err);
     }
+
+    public async searchCourses(body) {
+        const courses = new CoursesEntity();
+        courses.name = body.name;
+
+        return await this.coursesRepo.createQueryBuilder("courses").where("courses.name like :name OR courses.description like :description",{ name:`%${body.name}%`,description:`%${body.name}%`}).getMany();
+        
+    }
+
 }
