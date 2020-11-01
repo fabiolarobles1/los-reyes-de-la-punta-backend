@@ -21,18 +21,15 @@ export class StudentsService {
     }
 
     public async getCurrentCourses(stu_year) {
-        return await this.coursesRepo.find({ select: [ 'name',"description"] ,where: { year: stu_year , semestre:1}}).then(res => res).catch(err => err);
+        return await this.coursesRepo.find({ where: { year: stu_year , semestre:1 } }).then(res => res).catch(err => err);
     }
 
     public async getNextSemesterCourses(stu_year) {
-        return await this.coursesRepo.find({ select: [ 'name',"description"] ,where: { year: stu_year , semestre:2}}).then(res => res).catch(err => err);
+        return await this.coursesRepo.find({ where: { year: stu_year , semestre: 2} }).then(res => res).catch(err => err);
     }
 
-    public async searchCourses(body) {
-        const courses = new CoursesEntity();
-        courses.name = body.name;
-
-        return await this.coursesRepo.createQueryBuilder("courses").where("courses.name like :name OR courses.description like :description",{ name:`%${body.name}%`,description:`%${body.name}%`}).getMany();
+    public async searchCourses(name: string) {
+        return await this.coursesRepo.createQueryBuilder("courses").where("courses.name like :name OR courses.description like :description",{ name:`%${name}%`,description:`%${name}%`}).getMany();
         
     }
 

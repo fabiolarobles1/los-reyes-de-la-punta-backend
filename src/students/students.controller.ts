@@ -48,7 +48,8 @@ export class StudentsController {
     @UseGuards(JwtAuthGuard)
     @Post('search_courses')
     public async searchCourses(@Body() body) {
-        return this.studentService.searchCourses(body).then(res => res).catch(err => err) 
+        const searchInput = body.name;
+        return this.studentService.searchCourses(searchInput).then(res => res).catch(err => err) 
     }
 }
 
