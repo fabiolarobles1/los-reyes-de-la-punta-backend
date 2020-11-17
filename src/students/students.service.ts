@@ -60,10 +60,24 @@ export class StudentsService {
             return await this.enrollmentRepo.delete(enroll).then((res)=>res); 
     }
 
-    public async searchSections(section: number) {
-        return await this.sectionsRepo.createQueryBuilder("sections").where("sections.Courses_id like :section",{ section:`%${section}%`}).getMany();
-     }
-            
+    public async searchSections(search: string) {
+        return await this.sectionsRepo
+        .createQueryBuilder('s')
+        .leftJoin('professors', 'p', 's.Professor = p.id')
+        .leftJoin('courses', 'c', 's.Courses_id = c.id')
+        .where(`MATCH(c.name, c.description) AGAINST ('${search}')`)
+        .select([
+            's.id as SECTION_ID',
+            's.time as time',
+            's.Capacity as capacity',
+            's.Room as room',
+            's.Days as days',
+            's.Additional_Information as extra_info',
+            'c.credits as credits',
+            'c.name as course',
+            'p.name as professor'
+        ]).execute()
+    }
 }
 
 

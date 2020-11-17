@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Request, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, Request, Req, Query } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local.auth.guard';
@@ -75,16 +75,11 @@ export class StudentsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post('search_sections')
-    public async searchSections(@Body() body) {
-        const section = body.courseId
-
-        return this.studentService.searchSections(section).then(res => res).catch(err => err)
-
-
+    @Get('search_sections')
+    public async searchSections(@Query('search') search: string) {
+        search = search.trim().toUpperCase();
+        return this.studentService.searchSections(search).then(res => res).catch(err => err)
     }
-
-
 
 }
 
