@@ -8,6 +8,8 @@ import { CoursesEntity} from '../entities/courses.entity';
 import { StudentsController } from './students.controller';
 import { AuthService } from '../auth/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { SectionsEntity } from '../entities/sections.entity';
+import { EnrollmentEntity } from '../entities/enrollment_table.entity';
 
 @Module({
     imports: [
@@ -16,7 +18,9 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
                 DegreesEntity,
                 StudentsEntity,
                 CoursesEntity,
-                DepartmentsEntity
+                DepartmentsEntity,
+                SectionsEntity,
+                EnrollmentEntity
             ]
         ),
         JwtModule.register({

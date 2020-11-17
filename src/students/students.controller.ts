@@ -1,17 +1,18 @@
 import { Body, Controller, Get, Param, Post, UseGuards, Request, Req } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard';
-
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local.auth.guard';
 import { StudentsService } from './students.service';
 import { CoursesEntity } from '../entities/courses.entity';
+import { EnrollmentEntity } from '../entities/enrollment_table.entity';
+import { SectionsEntity } from '../entities/sections.entity';
 
 @Controller('students')
 export class StudentsController {
 
     constructor(
         private readonly studentService: StudentsService,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
         ) {}
 
     @Get('departments')
@@ -51,5 +52,39 @@ export class StudentsController {
         const searchInput = body.name;
         return this.studentService.searchCourses(searchInput).then(res => res).catch(err => err) 
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('enroll_course')
+    public async enroll_course(@Req() req, @Body() body) {
+        const student= req.user
+        const stuId = student.id
+
+        const section = body.sectionId
+        return this.studentService.enroll_course(stuId,section).then(res => res).catch(err => err)
+
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('withdraw_course')
+    public async withdraw_course(@Req() req, @Body() body) {
+        const student= req.user
+        const stuId = student.id
+        const section = body.sectionId
+
+        return this.studentService.withdraw_course(stuId,section).then(res => res).catch(err => err)
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('search_sections')
+    public async searchSections(@Body() body) {
+        const section = body.courseId
+
+        return this.studentService.searchSections(section).then(res => res).catch(err => err)
+
+
+    }
+
+
+
 }
 
