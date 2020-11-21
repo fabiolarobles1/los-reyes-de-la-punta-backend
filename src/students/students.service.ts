@@ -65,7 +65,7 @@ export class StudentsService {
         .createQueryBuilder('s')
         .leftJoin('professors', 'p', 's.Professor = p.id')
         .leftJoin('courses', 'c', 's.Courses_id = c.id')
-        .where(`MATCH(c.name, c.description) AGAINST ('${search}')`)
+        .where(`MATCH(c.name, c.description, c.regular_name) AGAINST ('${search}')`)
         .select([
             's.id as SECTION_ID',
             's.time as time',

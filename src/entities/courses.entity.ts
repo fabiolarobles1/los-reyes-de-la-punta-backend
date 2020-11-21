@@ -24,4 +24,7 @@ export class CoursesEntity {
   @Column()
   description: string;
 
+  @Column()
+  regular_name: string;
+
 }
