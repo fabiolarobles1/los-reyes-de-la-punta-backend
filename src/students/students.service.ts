@@ -42,22 +42,37 @@ export class StudentsService {
         return await this.coursesRepo.createQueryBuilder("courses").where("courses.name like :name OR courses.description like :description",{ name:`%${name}%`,description:`%${name}%`}).getMany();
      }
     public async enroll_course(stu_id: number, section_id:number) {
-        
-        if ((await this.sectionsRepo.findOne({where:{id:section_id}})).Capacity - await this.enrollmentRepo.count({where:{Section_id:section_id}})>0){
-            const enroll = new EnrollmentEntity();
-            enroll.Student_id = stu_id;
-            enroll.Section_id = section_id;
-            return await this.enrollmentRepo.save(enroll).then((res)=>res);
-        }
 
-        else {return "Section has maximum capacity"}
+        //Validar semestre del curso
+        const semester= await this.sectionsRepo.createQueryBuilder('s')
+        .leftJoin('courses', 'c', 's.Courses_id = c.id')
+        .where('s.id = :id',{id:section_id})
+        .select([
+            'c.semestre'
+        ]).execute()
+
+        if(semester[0]['c_semestre']==1){
+
+            return "This section is for the first semester"
+        }
+        else{
+
+            if ((await this.sectionsRepo.findOne({where:{id:section_id}})).Capacity - await this.enrollmentRepo.count({where:{Section_id:section_id}})>0){
+                const enroll = new EnrollmentEntity();
+                enroll.Student_id = stu_id;
+                enroll.Section_id = section_id;
+                return await this.enrollmentRepo.save(enroll).then((res)=>res);
+            }
+
+            else {return "Section has maximum capacity"}
     }
-    
+}
     public async withdraw_course(stu_id: number, section_id:number) {
-        const enroll = new EnrollmentEntity();
-            enroll.Student_id = stu_id;
-            enroll.Section_id = section_id;
-            return await this.enrollmentRepo.delete(enroll).then((res)=>res); 
+        const withdraw = new EnrollmentEntity();
+            withdraw.Student_id = stu_id;
+            withdraw.Section_id = section_id;
+            return await this.enrollmentRepo.delete(withdraw).then((res)=>res); 
+
     }
 
     public async searchSections(search: string) {
@@ -78,6 +93,29 @@ export class StudentsService {
             'p.name as professor'
         ]).execute()
     }
+    public async student_enrollment(stu_id: number) {
+        return await this.enrollmentRepo.createQueryBuilder('e')
+        .leftJoin('sections', 's', 'e.Section_id= s.id')
+        .leftJoin('courses', 'c', 's.Courses_id = c.id')
+        .leftJoin('professors', 'p', 's.Professor = p.id')
+        .where('e.Student_id=Student_id',{Student_id:stu_id})
+        .select([
+            's.id as section_id',
+            's.section as section',
+            'c.name as course',
+            'c.regular_name as regular_name',
+            'c.credits as credits',
+            's.Capacity as capacity',
+            's.time as time',
+            's.Days as days',
+            's.Room as room',
+            'p.name as professor',
+            's.Additional_Information as extra_info',
+            'c.semestre as semester'
+        ]).execute()
+        
+
+}
 }
 
 

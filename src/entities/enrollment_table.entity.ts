@@ -4,6 +4,9 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class EnrollmentEntity {
 
   @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   Student_id: number;
 
   @Column()

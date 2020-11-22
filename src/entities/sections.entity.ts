@@ -13,9 +13,6 @@ export class SectionsEntity {
   section: string;
 
   @Column()
-  Credits: number;
-
-  @Column()
   Time: string;
 
   @Column()

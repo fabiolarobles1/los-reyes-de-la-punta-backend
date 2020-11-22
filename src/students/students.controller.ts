@@ -58,6 +58,7 @@ export class StudentsController {
     public async enroll_course(@Req() req, @Body() body) {
         const student= req.user
         const stuId = student.id
+        
 
         const section = body.sectionId
         return this.studentService.enroll_course(stuId,section).then(res => res).catch(err => err)
@@ -79,6 +80,14 @@ export class StudentsController {
     public async searchSections(@Query('search') search: string) {
         search = search.trim().toUpperCase();
         return this.studentService.searchSections(search).then(res => res).catch(err => err)
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('student_enrollment')
+    public async student_enrollment(@Req() req) {
+        const student= req.user
+        const stuId = student.id
+        return this.studentService.student_enrollment(stuId).then(res => res).catch(err => err)
     }
 
 }
