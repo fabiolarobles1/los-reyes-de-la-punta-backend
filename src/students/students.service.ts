@@ -94,7 +94,13 @@ export class StudentsService {
             'c.credits as credits',
             'c.name as course',
             'p.name as professor',
-            'c.regular_name'
+            'c.regular_name',
+            `
+            (SELECT secs.Capacity - count(e.Section_id)
+            from enrollment_table e
+            join sections secs on e.Section_id = secs.id
+            WHERE secs.id = s.id) as spaces
+            `
         ]).execute()
     }
     public async student_enrollment(stu_id: number) {
