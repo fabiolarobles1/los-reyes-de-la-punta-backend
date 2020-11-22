@@ -75,12 +75,15 @@ export class StudentsService {
 
     }
 
-    public async searchSections(search: string) {
+    public async searchSections(search: string, semestre: number) {
         return await this.sectionsRepo
         .createQueryBuilder('s')
         .leftJoin('professors', 'p', 's.Professor = p.id')
         .leftJoin('courses', 'c', 's.Courses_id = c.id')
-        .where(`MATCH(c.name, c.description, c.regular_name) AGAINST ('${search}')`)
+        .where(`(:search IS NULL OR MATCH(c.name, c.description, c.regular_name) AGAINST (:search IN BOOLEAN MODE) ) AND (:semestre IS NULL OR c.semestre = :semestre)`, { 
+            search: search !== null ? search+'*' : search,
+            semestre: semestre
+        })
         .select([
             's.id as SECTION_ID',
             's.time as time',
@@ -90,7 +93,8 @@ export class StudentsService {
             's.Additional_Information as extra_info',
             'c.credits as credits',
             'c.name as course',
-            'p.name as professor'
+            'p.name as professor',
+            'c.regular_name'
         ]).execute()
     }
     public async student_enrollment(stu_id: number) {

@@ -2,8 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from "@nestjs/typeorm/dist/interfaces/typeorm-options.interface";
 import { getConnectionManager } from "typeorm";
 import { ConnectionManager } from "typeorm/connection/ConnectionManager";
+import { CoursesEntity } from "../entities/courses.entity";
 import { DegreesEntity } from "../entities/degrees.entity";
 import { DepartmentsEntity } from "../entities/departments.entity";
+import { EnrollmentEntity } from "../entities/enrollment_table.entity";
+import { SectionsEntity } from "../entities/sections.entity";
 import { StudentsEntity } from "../entities/students.entity";
 
 @Injectable()
@@ -29,9 +32,12 @@ export class Database implements TypeOrmOptionsFactory {
         },
         entities: [__dirname + './../**/*.entity!(*.d).{ts,js}'],
         // entities: [
+        //   CoursesEntity,
         //   DegreesEntity,
-        //   StudentsEntity,
-        //   DepartmentsEntity
+        //   DepartmentsEntity,
+        //   EnrollmentEntity,
+        //   SectionsEntity,
+        //   StudentsEntity
         // ],
         synchronize: false
       } as unknown as TypeOrmModuleOptions;

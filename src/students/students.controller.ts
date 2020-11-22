@@ -77,9 +77,18 @@ export class StudentsController {
 
     @UseGuards(JwtAuthGuard)
     @Get('search_sections')
-    public async searchSections(@Query('search') search: string) {
-        search = search.trim().toUpperCase();
-        return this.studentService.searchSections(search).then(res => res).catch(err => err)
+    public async searchSections(@Query('search') search: string, @Query('semestre') semestre: number) {
+        if(search !== null && search !== undefined) {
+            search = search.trim().toUpperCase();
+        } else {
+            search = null
+        }
+
+        if(semestre === null || semestre === undefined) {
+            semestre = null;
+        }
+
+        return this.studentService.searchSections(search, semestre).then(res => res).catch(err => err)
     }
 
     @UseGuards(JwtAuthGuard)
