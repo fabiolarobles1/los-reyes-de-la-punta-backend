@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { DepartmentsEntity } from '../entities/departments.entity';
 import { CoursesEntity } from '../entities/courses.entity';
 import { StudentsEntity } from '../entities/students.entity';
@@ -72,12 +72,8 @@ export class StudentsService {
             else {return "Section has maximum capacity"}
     }
 }
-    public async withdraw_course(stu_id: number, section_id:number) {
-        const withdraw = new EnrollmentEntity();
-            withdraw.Student_id = stu_id;
-            withdraw.Section_id = section_id;
-            return await this.enrollmentRepo.delete(withdraw).then((res)=>res); 
-
+    public async withdraw_course(stu_id: number, sectionids: number[]) {
+        return await this.enrollmentRepo.delete({ Student_id: stu_id, Section_id: In([sectionids]) }).then((res)=>res); 
     }
 
     public async searchSections(search: string, semestre: number) {
@@ -139,12 +135,15 @@ export class StudentsService {
         ]).execute()
     }
 
-    public async saveSection(userID: number, sectionID: number) {
-        const newItem = new SavedSectionsEntity();
-        newItem.student_id = userID;
-        newItem.section_id = sectionID;
+    public async saveSection(userID: number, sections: number[]) {
+        const newSections: SavedSectionsEntity[] = sections.map(e => {
+            const newItem = new SavedSectionsEntity();
+            newItem.student_id = userID;
+            newItem.section_id = e;
+            return newItem
+        });
         return await this.savedSectionsRepo.createQueryBuilder()
-                        .insert().orIgnore(true).into(SavedSectionsEntity).values([newItem]).execute();
+                        .insert().orIgnore(true).into(SavedSectionsEntity).values(newSections).execute();
     }
 
     public async getSavedSections(userID: number) {
@@ -175,8 +174,8 @@ export class StudentsService {
         ]).execute()
     }
 
-    public async removeSavedSection(userID: number, sectionID: number) {
-        return await this.savedSectionsRepo.delete({ student_id: userID, section_id: sectionID });
+    public async removeSavedSection(userID: number, sections: number[]) {
+        return await this.savedSectionsRepo.delete({ student_id: userID, section_id: In(sections) });
     }
 }
 

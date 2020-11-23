@@ -31,16 +31,16 @@ export class Database implements TypeOrmOptionsFactory {
         extra: {
            charset: "utf8mb4_unicode_ci" 
         },
-        entities: [__dirname + './../**/*.entity!(*.d).{ts,js}'],
-        // entities: [
-        //   CoursesEntity,
-        //   DegreesEntity,
-        //   DepartmentsEntity,
-        //   EnrollmentEntity,
-        //   SectionsEntity,
-        //   StudentsEntity,
-        //   SavedSectionsEntity
-        // ],
+        // entities: [__dirname + './../**/*.entity!(*.d).{ts,js}'],
+        entities: [
+          CoursesEntity,
+          DegreesEntity,
+          DepartmentsEntity,
+          EnrollmentEntity,
+          SectionsEntity,
+          StudentsEntity,
+          SavedSectionsEntity
+        ],
         synchronize: false
       } as unknown as TypeOrmModuleOptions;
 

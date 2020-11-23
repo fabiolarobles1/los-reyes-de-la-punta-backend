@@ -70,9 +70,8 @@ export class StudentsController {
     public async withdraw_course(@Req() req, @Body() body) {
         const student= req.user
         const stuId = student.id
-        const section = body.sectionId
-
-        return this.studentService.withdraw_course(stuId,section).then(res => res).catch(err => err)
+        const sections: number[] = body.sectionIds;
+        return this.studentService.withdraw_course(stuId,sections).then(() => JSON.stringify({ message: "courses removed successfully!" } )).catch(err => err)
     }
 
     @UseGuards(JwtAuthGuard)
@@ -99,18 +98,22 @@ export class StudentsController {
         return this.studentService.student_enrollment(stuId).then(res => res).catch(err => err)
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Post('save_section/:id')
-    public async saveSection(@Req() req, @Param('id', ParseIntPipe) sectionID: number) {
-        const userID = req.user.id;
-        return this.studentService.saveSection(userID, sectionID).then(() => JSON.stringify({ message: "section successfully saved!" }) );;
-    }
 
     @UseGuards(JwtAuthGuard)
-    @Delete('remove_section/:id')
-    public async removeSavedSection(@Req() req, @Param('id', ParseIntPipe) sectionID: number) {
+    @Post('save_section')
+    public async saveSection(@Req() req, @Body() body) {
         const userID = req.user.id;
-        return this.studentService.removeSavedSection(userID, sectionID).then(() => JSON.stringify({ message: "section successfully removed!" }) );
+        const sections: number[] = body.sectionIds;
+        return this.studentService.saveSection(userID, sections).then(() => JSON.stringify({ message: "section successfully saved!" }) );;
+    }
+
+    //sectionIds [];
+    @UseGuards(JwtAuthGuard)
+    @Delete('remove_section')
+    public async removeSavedSection(@Req() req, @Body() body) {
+        const userID = req.user.id;
+        const sections: number[] = body.sectionIds;
+        return this.studentService.removeSavedSection(userID, sections).then(() => JSON.stringify({ message: "sections successfully removed!" }) );
     }
 
     @UseGuards(JwtAuthGuard)
