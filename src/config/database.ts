@@ -6,6 +6,7 @@ import { CoursesEntity } from "../entities/courses.entity";
 import { DegreesEntity } from "../entities/degrees.entity";
 import { DepartmentsEntity } from "../entities/departments.entity";
 import { EnrollmentEntity } from "../entities/enrollment_table.entity";
+import { SavedSectionsEntity } from "../entities/saved.sections.entity";
 import { SectionsEntity } from "../entities/sections.entity";
 import { StudentsEntity } from "../entities/students.entity";
 
@@ -37,7 +38,8 @@ export class Database implements TypeOrmOptionsFactory {
         //   DepartmentsEntity,
         //   EnrollmentEntity,
         //   SectionsEntity,
-        //   StudentsEntity
+        //   StudentsEntity,
+        //   SavedSectionsEntity
         // ],
         synchronize: false
       } as unknown as TypeOrmModuleOptions;

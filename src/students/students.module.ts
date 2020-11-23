@@ -10,6 +10,7 @@ import { AuthService } from '../auth/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { SectionsEntity } from '../entities/sections.entity';
 import { EnrollmentEntity } from '../entities/enrollment_table.entity';
+import { SavedSectionsEntity } from '../entities/saved.sections.entity';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { EnrollmentEntity } from '../entities/enrollment_table.entity';
                 CoursesEntity,
                 DepartmentsEntity,
                 SectionsEntity,
-                EnrollmentEntity
+                EnrollmentEntity,
+                SavedSectionsEntity
             ]
         ),
         JwtModule.register({

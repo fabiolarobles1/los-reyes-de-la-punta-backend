@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Request, Req, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, Request, Req, Query, ParseIntPipe, NotAcceptableException, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local.auth.guard';
@@ -97,6 +97,27 @@ export class StudentsController {
         const student= req.user
         const stuId = student.id
         return this.studentService.student_enrollment(stuId).then(res => res).catch(err => err)
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('save_section/:id')
+    public async saveSection(@Req() req, @Param('id', ParseIntPipe) sectionID: number) {
+        const userID = req.user.id;
+        return this.studentService.saveSection(userID, sectionID).then(() => JSON.stringify({ message: "section successfully saved!" }) );;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('remove_section/:id')
+    public async removeSavedSection(@Req() req, @Param('id', ParseIntPipe) sectionID: number) {
+        const userID = req.user.id;
+        return this.studentService.removeSavedSection(userID, sectionID).then(() => JSON.stringify({ message: "section successfully removed!" }) );
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('saved_sections')
+    public async getSavedSections(@Req() req) {
+        const userID = req.user.id;
+        return this.studentService.getSavedSections(userID);
     }
 
 }
