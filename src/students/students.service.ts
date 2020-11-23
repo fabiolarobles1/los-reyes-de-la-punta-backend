@@ -108,7 +108,7 @@ export class StudentsService {
         .leftJoin('sections', 's', 'e.Section_id= s.id')
         .leftJoin('courses', 'c', 's.Courses_id = c.id')
         .leftJoin('professors', 'p', 's.Professor = p.id')
-        .where('e.Student_id=Student_id',{Student_id:stu_id})
+        .where('e.Student_id = :Student_id',{Student_id:stu_id})
         .select([
             's.id as section_id',
             's.section as section',
