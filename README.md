@@ -1,3 +1,10 @@
+# UPR Enrollment System Project ( Back-End )
+### This group project was made for the INSO 4101 Course at UPRM. It is a proposal to improve the enrollment system of our university with a server-less infrastructure to avoid current problems during the enrollment period.
+  
+#
+The project ideas and proposals documents can be found [HERE](https://github.com/uprm-inso-4101-2020-2021-S1/semester-project-los-reyes-de-la-punta).
+#
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
